@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDados } from "@/lib/dados";
-import { diaLongo, hojeISO } from "@/lib/datas";
+import { hojeISO } from "@/lib/datas";
 import { useAcoesSessao } from "@/lib/sessao";
 import { useTema } from "@/lib/tema";
 import { formatarTelefone, telefoneValido } from "@/lib/telefone";
@@ -183,36 +183,37 @@ function AlterarSenha() {
   );
 }
 
-function ProximosDias({ eu }: { eu: Colaborador }) {
+function StatusEscala({ eu }: { eu: Colaborador }) {
   const { estado } = useVisao();
   const hoje = hojeISO();
-  const proximos = estado.escala
-    .filter((i) => i.colaboradorId === eu.id && i.data >= hoje)
-    .sort((a, b) => a.data.localeCompare(b.data))
-    .slice(0, 6);
+  const itens = estado.escala.filter((i) => i.colaboradorId === eu.id && i.data === hoje);
 
-  if (!proximos.length) {
-    return <p className="text-sm text-muted-foreground">Você não está na escala dos próximos dias. A administração monta a escala.</p>;
+  if (!itens.length) {
+    return (
+      <p className="text-sm text-muted-foreground">
+        Você está <strong>desligado</strong> na escala no momento. A administração liga ou desliga quem recebe novos leads.
+      </p>
+    );
   }
   return (
-    <ul className="divide-y rounded-lg border text-sm">
-      {proximos.map((i) => (
-        <li key={i.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
-          <span className="flex items-center gap-2">
-            <CalendarCheck className="size-4 text-primary" />
-            <span className="first-letter:uppercase">{i.data === hoje ? "Hoje" : diaLongo(i.data)}</span>
-          </span>
-          <EtiquetaArea area={i.area} />
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border px-4 py-3 text-sm">
+      <span className="flex items-center gap-2 font-medium text-emerald-700 dark:text-emerald-400">
+        <CalendarCheck className="size-4" />
+        Ligado · recebendo leads
+      </span>
+      <div className="flex items-center gap-1.5">
+        {itens.map((i) => (
+          <EtiquetaArea key={i.id} area={i.area} />
+        ))}
+      </div>
+    </div>
   );
 }
 
 const PERMISSOES_ADMIN = [
   "Ver todas as conversas do bot e dos corretores",
   "Auditar para quem cada lead foi, com data e hora",
-  "Montar a escala e escolher quem recebe lead em cada dia",
+  "Ligar e desligar quem recebe leads na escala de atendimento",
   "Cadastrar e convidar a equipe e conectar o WhatsApp dos corretores",
 ];
 const PERMISSOES_CORRETOR = [
@@ -271,8 +272,8 @@ export default function Perfil() {
         )}
 
         {ehAdmin ? null : (
-          <Secao titulo="Meus próximos dias na escala" descricao="Nos dias em que está na escala você entra no sorteio de leads da sua área.">
-            <ProximosDias eu={eu} />
+          <Secao titulo="Status na escala" descricao="Quando você está ligado na escala, entra no sorteio de leads da sua área.">
+            <StatusEscala eu={eu} />
           </Secao>
         )}
 

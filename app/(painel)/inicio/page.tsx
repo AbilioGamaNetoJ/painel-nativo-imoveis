@@ -9,9 +9,8 @@ import { AvatarPessoa } from "@/components/pessoa";
 import { Button } from "@/components/ui/button";
 import { useAgora } from "@/lib/agora";
 import { diaLongo, haQuanto, hojeISO } from "@/lib/datas";
-import { diasSemEscala } from "@/lib/regras";
 import { primeiroNome } from "@/lib/telefone";
-import { AREAS, ROTULO_AREA, ROTULO_INTENCAO } from "@/lib/tipos";
+import { AREAS, ROTULO_AREA, ROTULO_INTENCAO, type Area } from "@/lib/tipos";
 import { useVisao } from "@/lib/visao";
 
 function Numero({ icone, rotulo, valor, detalhe }: { icone: ReactNode; rotulo: string; valor: number; detalhe?: string }) {
@@ -49,7 +48,9 @@ export default function Inicio() {
   const pausadas = conversas.filter((c) => c.canal === "bot" && c.botPausadoAte && new Date(c.botPausadoAte).getTime() > agora).length;
 
   const escaladosHoje = estado.escala.filter((i) => i.data === hoje && porId.get(i.colaboradorId)?.ativo);
-  const semEscala = ehAdmin ? diasSemEscala(estado.escala, estado.colaboradores, hoje, 14) : [];
+  const areasSemCorretor: Area[] = ehAdmin
+    ? (["vendas", "locacao", "captacao"] as Area[]).filter((area) => !escaladosHoje.some((i) => i.area === area))
+    : [];
   const desconectados = ehAdmin
     ? estado.colaboradores.filter((c) => c.ativo && c.papel === "corretor" && c.statusWhatsApp !== "conectado" && c.sessaoCaiuEm)
     : [];
@@ -78,10 +79,10 @@ export default function Inicio() {
             <CalendarCheck className="size-4 shrink-0 text-primary" />
             {minhaEscala.length ? (
               <p>
-                Você está <strong>escalado hoje</strong> em {minhaEscala.map((i) => ROTULO_AREA[i.area]).join(" e ")}. Os leads sorteados chegam no seu WhatsApp e aparecem aqui.
+                Você está <strong>ligado na escala</strong> em {minhaEscala.map((i) => ROTULO_AREA[i.area]).join(" e ")}. Os leads sorteados chegam no seu WhatsApp e aparecem aqui.
               </p>
             ) : (
-              <p>Você não está na escala de hoje. Leads de contatos que você já atendeu nos últimos 7 dias continuam indo para você.</p>
+              <p>Você está <strong>desligado na escala</strong>. Leads de contatos que você já atendeu nos últimos 7 dias continuam indo para você.</p>
             )}
           </div>
         ) : null}
@@ -122,17 +123,17 @@ export default function Inicio() {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-sm text-muted-foreground">Ninguém escalado: os leads vão para a recepção.</span>
+                        <span className="text-sm text-muted-foreground">Ninguém ligado: os leads vão para a recepção.</span>
                       )}
                     </li>
                   );
                 })}
               </ul>
-              {semEscala.length ? (
+              {areasSemCorretor.length ? (
                 <Link href="/escala" className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 dark:bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-500/20">
                   <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
                   <span>
-                    <strong>{semEscala.length} dias</strong> dos próximos 14 têm área sem corretor escalado. Os leads dessas áreas vão para a recepção.
+                    <strong>{areasSemCorretor.map((a) => ROTULO_AREA[a]).join(", ")}</strong> sem corretor ligado. Os leads dessas áreas vão para a recepção.
                   </span>
                 </Link>
               ) : null}

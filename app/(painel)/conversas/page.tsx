@@ -85,8 +85,11 @@ function Conteudo() {
               painel={<PainelContato conversa={aberta} lead={selecionada.lead} />}
             />
           </div>
-          <aside className="hidden w-[340px] shrink-0 overflow-y-auto border-l p-4 xl:block">
-            <PainelContato conversa={aberta} lead={selecionada.lead} />
+          {/* o padding fica num elemento interno: a barra de salvar da ficha gruda na borda de baixo da área que rola */}
+          <aside className="hidden w-[340px] shrink-0 overflow-y-auto border-l xl:block">
+            <div className="p-4">
+              <PainelContato conversa={aberta} lead={selecionada.lead} />
+            </div>
           </aside>
         </>
       ) : (

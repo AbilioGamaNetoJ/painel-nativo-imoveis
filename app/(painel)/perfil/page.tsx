@@ -210,25 +210,12 @@ function StatusEscala({ eu }: { eu: Colaborador }) {
   );
 }
 
-const PERMISSOES_ADMIN = [
-  "Ver todas as conversas do bot e dos corretores",
-  "Auditar para quem cada lead foi, com data e hora",
-  "Ligar e desligar quem recebe leads na escala de atendimento",
-  "Cadastrar e convidar a equipe e conectar o WhatsApp dos corretores",
-];
-const PERMISSOES_CORRETOR = [
-  "Ver as conversas do bot dos leads que você recebeu",
-  "Ver a conversa do seu WhatsApp de trabalho (somente leitura)",
-  "Consultar seus leads e registrar a origem de cada um",
-];
-
 export default function Perfil() {
   const router = useRouter();
   const { eu, ehAdmin } = useVisao();
   const { sair } = useAcoesSessao();
 
   if (!eu) return null;
-  const permissoes = ehAdmin ? PERMISSOES_ADMIN : PERMISSOES_CORRETOR;
 
   return (
     <Pagina titulo="Meu perfil" descricao="Seus dados, aparência e acesso ao painel">
@@ -276,17 +263,6 @@ export default function Perfil() {
             <StatusEscala eu={eu} />
           </Secao>
         )}
-
-        <Secao titulo="O que seu perfil pode fazer">
-          <ul className="space-y-2 text-sm">
-            {permissoes.map((p) => (
-              <li key={p} className="flex items-start gap-2">
-                <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-primary" />
-                {p}
-              </li>
-            ))}
-          </ul>
-        </Secao>
 
         <Secao titulo="Segurança">
           <div className="flex flex-wrap gap-2">

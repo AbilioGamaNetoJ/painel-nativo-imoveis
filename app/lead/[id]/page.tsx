@@ -44,9 +44,9 @@ export default function FichaNoCelular({ params }: { params: Promise<{ id: strin
           </div>
         </header>
 
-        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+        <div className="min-h-0 flex-1 overflow-y-auto">
           {lead ? (
-            <div className="space-y-4">
+            <div className="space-y-4 p-4">
               <p className="rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">Encaminhado em {dataHora(lead.encaminhadoEm)}</p>
               <div className="grid grid-cols-2 gap-2">
                 <Button className="h-11" onClick={() => aviso("Chamar no WhatsApp")}>
@@ -61,7 +61,7 @@ export default function FichaNoCelular({ params }: { params: Promise<{ id: strin
               <FichaLead lead={lead} />
             </div>
           ) : (
-            <div className="grid h-full place-items-center text-center">
+            <div className="grid h-full place-items-center p-4 text-center">
               <div>
                 <p className="text-sm font-medium">{existe ? "Este lead é de outro corretor." : "Lead não encontrado."}</p>
                 <p className="mt-1 text-xs text-muted-foreground">O corretor só vê os leads que recebeu.</p>

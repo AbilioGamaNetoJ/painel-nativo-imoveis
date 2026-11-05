@@ -144,6 +144,15 @@ export const ROTULO_TIPO_AGENTE: Record<TipoAgente, string> = {
   recuperacao: "Reengajamento",
 };
 
+/**
+ * O que se corrige na ficha do lead. Corretor, data, nível, área e critério do encaminhamento
+ * são o registro da auditoria, e o telefone identifica o contato: nenhum deles entra aqui.
+ */
+export type CamposLead = Pick<
+  Lead,
+  "nome" | "intencao" | "finalidade" | "regiao" | "tipoImovel" | "caracteristicas" | "faixaValor" | "pagamento" | "prazo" | "melhorHorario" | "imovelUrl" | "observacoes"
+>;
+
 export interface Estado {
   /** AAAA-MM-DD em que os dados foram gerados; muda o dia, a prévia gera de novo */
   semente: string;

@@ -16,7 +16,7 @@ const DESCRICAO_AREA: Record<Area, string> = {
   vendas: "Compra e permuta de imóveis",
   locacao: "Aluguel anual e temporada",
   captacao: "Proprietários que querem anunciar",
-  recepcao: "Assuntos gerais e apoio quando uma área está desligada",
+  recepcao: "Assuntos gerais e apoio às áreas",
 };
 
 interface LinhaCorretorProps {
@@ -32,7 +32,7 @@ function LinhaCorretor({ colaborador, area, ligado, recebidosHoje, aoAlternar }:
     <li>
       <label
         className={cn(
-          "group flex cursor-pointer items-center gap-3.5 rounded-xl border p-3.5 transition-all select-none",
+          "group flex min-w-0 cursor-pointer items-center gap-3 overflow-hidden rounded-xl border p-3 transition-all select-none sm:gap-3.5 sm:p-3.5",
           ligado
             ? "border-primary/35 bg-primary/[0.04] shadow-2xs hover:border-primary/50 hover:bg-primary/[0.07] dark:border-primary/30 dark:bg-primary/[0.08] dark:hover:bg-primary/[0.12]"
             : "border-border/70 bg-muted/20 opacity-75 hover:bg-muted/40 hover:opacity-100",
@@ -51,22 +51,22 @@ function LinhaCorretor({ colaborador, area, ligado, recebidosHoje, aoAlternar }:
 
         <div className="min-w-0 flex-1">
           <p className={cn("truncate text-sm font-semibold", !ligado && "text-foreground/80")}>{colaborador.nome}</p>
-          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground">
+          <p className="mt-0.5 truncate text-xs text-muted-foreground">
             {ligado ? (
               <>
-                <span className="font-medium text-emerald-700 dark:text-emerald-400">Recebendo leads</span>
-                <span aria-hidden>·</span>
+                <span className="font-medium text-emerald-700 dark:text-emerald-400">Recebendo</span>
+                {" · "}
                 <span className="tabular-nums">
                   {recebidosHoje} {recebidosHoje === 1 ? "lead hoje" : "leads hoje"}
                 </span>
               </>
             ) : (
-              <span>Não recebe leads</span>
+              "Não recebe leads"
             )}
           </p>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2.5">
+        <div className="flex shrink-0 items-center gap-2 pr-0.5">
           <span
             className={cn(
               "hidden rounded-full px-2 py-0.5 text-[11px] font-semibold sm:inline-block",
@@ -119,56 +119,56 @@ export default function Escala() {
   );
 
   return (
-    <Pagina titulo="Escala de atendimento" descricao="Ligue ou desligue quem recebe os leads do bot em cada área">
-      <div className="mx-auto flex max-w-5xl flex-col gap-4">
+    <Pagina titulo="Escala de atendimento" descricao="Ligue ou desligue quem recebe os leads do bot">
+      <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-3.5 sm:gap-4">
         {/* Resumo objetivo no topo */}
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border bg-card px-4 py-3 shadow-2xs">
-          <div className="flex items-center gap-2.5 text-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-2xl border bg-card px-3.5 py-3 shadow-2xs sm:px-4">
+          <div className="flex min-w-0 items-center gap-2.5 text-sm">
             <span className="grid size-8 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
               <Users className="size-4" />
             </span>
-            <div>
-              <p className="font-medium">
+            <div className="min-w-0">
+              <p className="truncate font-medium">
                 <strong className="tabular-nums">{totalLigados}</strong> de{" "}
                 <span className="tabular-nums">{corretoresAtivos.length}</span> corretores ligados
               </p>
-              <p className="text-xs text-muted-foreground">
-                O bot divide os leads igualmente entre quem estiver ligado na área.
+              <p className="truncate text-xs text-muted-foreground">
+                Leads divididos entre quem está ligado na área.
               </p>
             </div>
           </div>
 
           {areasDescobertas.length === 0 ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-2.5 py-1 text-xs font-medium text-emerald-700 dark:text-emerald-300">
-              <CheckCircle2 className="size-3.5" />
+              <CheckCircle2 className="size-3.5 shrink-0" />
               Todas as áreas atendendo
             </span>
           ) : (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-medium text-amber-800 dark:text-amber-200">
-              <AlertTriangle className="size-3.5" />
-              {areasDescobertas.map((a) => ROTULO_AREA[a]).join(", ")} sem corretor ligado
+              <AlertTriangle className="size-3.5 shrink-0" />
+              {areasDescobertas.map((a) => ROTULO_AREA[a]).join(", ")} sem corretor
             </span>
           )}
         </div>
 
         {/* Cartões por área */}
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid min-w-0 gap-3.5 sm:gap-4 md:grid-cols-2">
           {AREAS.map((area) => {
             const doTime = corretoresAtivos.filter((c) => c.area === area);
             const ligados = doTime.filter((c) => estaLigado(c.id, area));
             const semNinguem = doTime.length > 0 && ligados.length === 0;
 
             return (
-              <section key={area} className="flex flex-col rounded-2xl border bg-card shadow-2xs">
-                <header className="flex items-center justify-between gap-2 border-b px-4 py-3.5">
-                  <div className="min-w-0">
+              <section key={area} className="flex min-w-0 flex-col overflow-hidden rounded-2xl border bg-card shadow-2xs">
+                <header className="flex items-center justify-between gap-2 border-b px-3.5 py-3 sm:px-4">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
                       <EtiquetaArea area={area} />
                       <span className="text-xs text-muted-foreground tabular-nums">
                         {ligados.length}/{doTime.length} {ligados.length === 1 ? "ligado" : "ligados"}
                       </span>
                     </div>
-                    <p className="mt-1 truncate text-xs text-muted-foreground">{DESCRICAO_AREA[area]}</p>
+                    <p className="mt-0.5 truncate text-xs text-muted-foreground">{DESCRICAO_AREA[area]}</p>
                   </div>
 
                   {doTime.length > 1 ? (
@@ -185,7 +185,7 @@ export default function Escala() {
                             : `Todos desligados em ${ROTULO_AREA[area]}`,
                         );
                       }}
-                      className="inline-flex shrink-0 items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                      className="inline-flex shrink-0 items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
                       <Power className="size-3" />
                       {ligados.length < doTime.length ? "Ligar todos" : "Desligar todos"}
@@ -193,13 +193,13 @@ export default function Escala() {
                   ) : null}
                 </header>
 
-                <div className="flex flex-1 flex-col justify-between p-3.5">
+                <div className="flex flex-1 flex-col justify-between p-3 sm:p-3.5">
                   {doTime.length === 0 ? (
                     <p className="py-6 text-center text-xs text-muted-foreground">
                       Nenhum corretor cadastrado nesta área.
                     </p>
                   ) : (
-                    <ul className="space-y-2.5">
+                    <ul className="space-y-2">
                       {doTime.map((c) => {
                         const item = itemDeHoje(c.id, area);
                         return (
@@ -219,8 +219,8 @@ export default function Escala() {
                   {semNinguem && area !== "recepcao" ? (
                     <div className="mt-3 flex items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200">
                       <ShieldAlert className="size-4 shrink-0 text-amber-600 dark:text-amber-400" />
-                      <span>
-                        Ninguém ligado — os leads de <strong>{ROTULO_AREA[area]}</strong> vão para a recepção
+                      <span className="min-w-0 flex-1">
+                        Ninguém ligado — leads vão para a recepção
                         {recepcao ? ` (${recepcao.nome})` : ""}.
                       </span>
                     </div>

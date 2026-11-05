@@ -16,7 +16,7 @@ export function Pagina({
   className?: string;
 }) {
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full min-h-0 min-w-0 flex-col">
       <header className="flex min-h-14 shrink-0 items-center gap-3 border-b px-4 py-2 md:px-6">
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-base font-semibold">{titulo}</h1>
@@ -24,7 +24,7 @@ export function Pagina({
         </div>
         {acoes ? <div className="flex shrink-0 items-center gap-2">{acoes}</div> : null}
       </header>
-      <div className={cn("min-h-0 flex-1 overflow-y-auto p-4 md:p-6", className)}>{children}</div>
+      <div className={cn("min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-3.5 sm:p-4 md:p-6", className)}>{children}</div>
     </div>
   );
 }

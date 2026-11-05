@@ -12,6 +12,7 @@ import type {
   Lead,
   Mensagem,
   OrigemLead,
+  CamposLead,
   Papel,
   StatusWhatsApp,
 } from "../tipos";
@@ -55,6 +56,8 @@ interface Acoes {
   atualizarPerfil: (id: string, dados: { nome: string; telefone: string }) => void;
   /** o corretor registra de onde o contato veio; vale para todos os leads do mesmo telefone */
   definirOrigem: (chave: string, origem: OrigemLead, porId: string) => void;
+  /** o corretor ou o administrador corrige a ficha do lead; o registro do encaminhamento não muda */
+  atualizarLead: (id: string, dados: CamposLead) => void;
   /** liga ou desliga um agente. Na prévia só muda o estado; depois do contrato ativa ou desativa o fluxo no n8n. */
   alternarAgente: (id: string, ativo: boolean, porId: string) => void;
   restaurar: () => void;
@@ -237,6 +240,33 @@ export function DadosProvider({ children }: { children: ReactNode }) {
             leads: e.leads.map((l) =>
               l.chaveTelefone === chave ? { ...l, origem, origemPorId: informada ? porId : null, origemEm: informada ? em : null } : l,
             ),
+          };
+        }),
+
+      atualizarLead: (id, dados) =>
+        alterar((e) => {
+          const alvo = e.leads.find((l) => l.id === id);
+          if (!alvo) return e;
+          const campos: CamposLead = {
+            nome: dados.nome.trim(),
+            intencao: dados.intencao,
+            finalidade: dados.finalidade.trim(),
+            regiao: dados.regiao.trim(),
+            tipoImovel: dados.tipoImovel.trim(),
+            caracteristicas: dados.caracteristicas.trim(),
+            faixaValor: dados.faixaValor.trim(),
+            pagamento: dados.pagamento.trim(),
+            prazo: dados.prazo.trim(),
+            melhorHorario: dados.melhorHorario.trim(),
+            imovelUrl: dados.imovelUrl.trim(),
+            observacoes: dados.observacoes.trim(),
+          };
+          // o nome é do contato, não só desta ficha: vale para os outros leads e conversas do mesmo telefone
+          const nomeNovo = campos.nome && campos.nome !== alvo.nome ? campos.nome : null;
+          return {
+            ...e,
+            leads: e.leads.map((l) => (l.id === id ? { ...l, ...campos } : nomeNovo && l.chaveTelefone === alvo.chaveTelefone ? { ...l, nome: nomeNovo } : l)),
+            conversas: nomeNovo ? e.conversas.map((c) => (c.chaveTelefone === alvo.chaveTelefone ? { ...c, nomeCliente: nomeNovo } : c)) : e.conversas,
           };
         }),
 

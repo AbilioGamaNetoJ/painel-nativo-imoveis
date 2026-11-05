@@ -65,15 +65,13 @@ export function AppSidebar() {
   const { entrar, sair } = useAcoesSessao();
   const { tema, definirTema } = useTema();
   const { atendimento, gestao } = useMenu();
-  const { state, isMobile, toggleSidebar, setOpenMobile } = useSidebar();
+  const { state, isMobile, toggleSidebar } = useSidebar();
 
-  const recolhido = state === "collapsed" && !isMobile;
+  // No celular não há menu lateral: a navegação é a barra inferior (NavegacaoInferior)
+  if (isMobile) return null;
+
+  const recolhido = state === "collapsed";
   const perfis = estado.colaboradores.filter((c) => c.ativo && c.acesso === "ativo");
-
-  const irPara = (href: string) => {
-    setOpenMobile(false);
-    router.push(href);
-  };
 
   return (
     <Sidebar collapsible="icon">
@@ -88,25 +86,8 @@ export function AppSidebar() {
           </div>
         ) : null}
 
-        {isMobile ? (
-          <SidebarGroup>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton isActive={rotaAtiva(pathname, "/perfil")} onClick={() => irPara("/perfil")}>
-                    <UserRound />
-                    <span>Meu perfil</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        ) : (
-          <>
-            <GrupoDeItens titulo="Atendimento" itens={atendimento} pathname={pathname} />
-            <GrupoDeItens titulo="Gestão" itens={gestao} pathname={pathname} />
-          </>
-        )}
+        <GrupoDeItens titulo="Atendimento" itens={atendimento} pathname={pathname} />
+        <GrupoDeItens titulo="Gestão" itens={gestao} pathname={pathname} />
       </SidebarContent>
 
       <SidebarFooter className="border-t">
@@ -123,7 +104,7 @@ export function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent side={recolhido ? "right" : "top"} align="start" className="w-64">
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => irPara("/perfil")}>
+                  <DropdownMenuItem onClick={() => router.push("/perfil")}>
                     <UserRound />
                     Meu perfil
                   </DropdownMenuItem>
@@ -147,7 +128,7 @@ export function AppSidebar() {
                       key={p.id}
                       onClick={() => {
                         entrar({ papel: p.papel, colaboradorId: p.id });
-                        irPara("/inicio");
+                        router.push("/inicio");
                       }}
                     >
                       <AvatarPessoa nome={p.nome} tamanho="sm" />
@@ -160,7 +141,7 @@ export function AppSidebar() {
                 <DropdownMenuItem
                   onClick={() => {
                     sair();
-                    irPara("/login");
+                    router.push("/login");
                   }}
                 >
                   <LogOut />
@@ -172,17 +153,15 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarFooter>
 
-      {isMobile ? null : (
-        <button
-          type="button"
-          onClick={toggleSidebar}
-          aria-label={recolhido ? "Expandir o menu" : "Minimizar o menu"}
-          title={recolhido ? "Expandir o menu" : "Minimizar o menu"}
-          className="absolute top-1/2 -right-3.5 z-20 grid size-7 -translate-y-1/2 place-items-center rounded-full border bg-background text-muted-foreground shadow-sm transition-colors outline-none hover:bg-accent hover:text-accent-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          {recolhido ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
-        </button>
-      )}
+      <button
+        type="button"
+        onClick={toggleSidebar}
+        aria-label={recolhido ? "Expandir o menu" : "Minimizar o menu"}
+        title={recolhido ? "Expandir o menu" : "Minimizar o menu"}
+        className="absolute top-1/2 -right-3.5 z-20 grid size-7 -translate-y-1/2 place-items-center rounded-full border bg-background text-muted-foreground shadow-sm transition-colors outline-none hover:bg-accent hover:text-accent-foreground focus-visible:ring-3 focus-visible:ring-ring/50"
+      >
+        {recolhido ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
+      </button>
     </Sidebar>
   );
 }

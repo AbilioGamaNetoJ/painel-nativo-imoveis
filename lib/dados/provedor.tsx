@@ -21,7 +21,7 @@ import { gerarDemonstracao } from "./ficticio";
 // alterações ficam no navegador. Depois do contrato, as mesmas funções passam a ler e
 // gravar no Supabase (a RLS decide o que cada perfil enxerga) sem mudar as telas.
 
-const CHAVE = "nativo-previa:estado:v2";
+const CHAVE = "nativo-previa:estado:v5";
 
 export interface NovoColaborador {
   nome: string;
@@ -40,9 +40,9 @@ export interface NovoEncaminhamento {
 }
 
 interface Acoes {
-  /** liga ou desliga um corretor no plantão de vários dias de uma vez */
-  alternarPlantao: (dias: string[], colaboradorId: string, area: Area, ligar: boolean) => void;
-  copiarPlantao: (deDia: string, paraDias: string[]) => void;
+  /** liga ou desliga um corretor na escala de vários dias de uma vez */
+  alternarEscala: (dias: string[], colaboradorId: string, area: Area, ligar: boolean) => void;
+  copiarEscala: (deDia: string, paraDias: string[]) => void;
   cadastrarColaborador: (dados: NovoColaborador) => Colaborador;
   convidar: (email: string, papel: Papel) => Colaborador;
   definirAtivo: (id: string, ativo: boolean) => void;
@@ -55,6 +55,8 @@ interface Acoes {
   atualizarPerfil: (id: string, dados: { nome: string; telefone: string }) => void;
   /** o corretor registra de onde o contato veio; vale para todos os leads do mesmo telefone */
   definirOrigem: (chave: string, origem: OrigemLead, porId: string) => void;
+  /** liga ou desliga um agente. Na prévia só muda o estado; depois do contrato ativa ou desativa o fluxo no n8n. */
+  alternarAgente: (id: string, ativo: boolean, porId: string) => void;
   restaurar: () => void;
 }
 
@@ -102,7 +104,7 @@ export function DadosProvider({ children }: { children: ReactNode }) {
 
   const acoes = useMemo<Acoes>(
     () => ({
-      alternarPlantao: (dias, colaboradorId, area, ligar) =>
+      alternarEscala: (dias, colaboradorId, area, ligar) =>
         alterar((e) => {
           let escala = e.escala;
           for (const dia of dias) {
@@ -123,7 +125,7 @@ export function DadosProvider({ children }: { children: ReactNode }) {
           return { ...e, escala };
         }),
 
-      copiarPlantao: (deDia, paraDias) =>
+      copiarEscala: (deDia, paraDias) =>
         alterar((e) => {
           const origem = e.escala.filter((i) => i.data === deDia);
           const alvo = new Set(paraDias.filter((d) => d !== deDia));
@@ -237,6 +239,13 @@ export function DadosProvider({ children }: { children: ReactNode }) {
             ),
           };
         }),
+
+      alternarAgente: (id, ativo, porId) =>
+        alterar((e) => ({
+          ...e,
+          // agente bloqueado não liga: a trava vale aqui, não só no botão
+          agentes: e.agentes.map((a) => (a.id === id && !a.bloqueado ? { ...a, ativo, alteradoEm: new Date().toISOString(), alteradoPorId: porId } : a)),
+        })),
 
       restaurar: () => setEstado(gerarDemonstracao()),
     }),

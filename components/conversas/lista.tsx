@@ -4,7 +4,6 @@ import { Bot, MessageCircle, PauseCircle, RefreshCw, Search } from "lucide-react
 import { EtiquetaArea, EtiquetaNivel } from "@/components/etiquetas";
 import { AvatarPessoa } from "@/components/pessoa";
 import { Input } from "@/components/ui/input";
-import { BotaoMenuMobile } from "@/components/botao-menu-mobile";
 import { useAgora } from "@/lib/agora";
 import { rotuloLista } from "@/lib/datas";
 import { primeiroNome } from "@/lib/telefone";
@@ -60,7 +59,6 @@ export function ListaConversas({ itens, selecionadaId, aoSelecionar, filtro, aoF
   return (
     <section className={cn("min-h-0 w-full flex-col border-r md:flex md:w-[340px] md:shrink-0", escondidaNoCelular ? "hidden" : "flex")}>
       <header className="flex h-14 shrink-0 items-center gap-2 border-b px-3">
-        <BotaoMenuMobile />
         <h1 className="text-base font-semibold">Conversas</h1>
         <span className="rounded-md bg-muted px-1.5 py-0.5 text-xs text-muted-foreground tabular-nums">{contagem.todas}</span>
       </header>

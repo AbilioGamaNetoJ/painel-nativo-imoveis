@@ -18,7 +18,7 @@ Entrada sem senha: na tela de login, "Entrar como Administrador" (Helena) ou "En
 2. **Conversas**: abrir um lead, com a ficha ao lado e o histórico; registrar a origem na ficha (quem preenche é o corretor).
 3. **Simular lead** (botão no menu): o cliente fala com o bot, o sistema classifica, sorteia o corretor da escala de hoje e o aviso chega no celular dele.
 4. **Auditoria**: o lead novo já está lá, com corretor, data e hora.
-5. **Escala**: resolver um dia sem plantão, marcar vários dias de uma vez.
+5. **Escala**: resolver um dia sem corretor escalado, marcar vários dias de uma vez.
 6. **Equipe**: cadastrar, convidar (mostra o e-mail), conectar o WhatsApp (QR Code).
 7. Trocar para **Corretor**: só as conversas e os leads dele.
 8. **Meu perfil** (menu do usuário): dados, tema claro/escuro e, no celular, a barra de navegação inferior.

@@ -183,7 +183,7 @@ function AlterarSenha() {
   );
 }
 
-function ProximosPlantoes({ eu }: { eu: Colaborador }) {
+function ProximosDias({ eu }: { eu: Colaborador }) {
   const { estado } = useVisao();
   const hoje = hojeISO();
   const proximos = estado.escala
@@ -192,7 +192,7 @@ function ProximosPlantoes({ eu }: { eu: Colaborador }) {
     .slice(0, 6);
 
   if (!proximos.length) {
-    return <p className="text-sm text-muted-foreground">Você não está em nenhum plantão nos próximos dias. A administração monta a escala.</p>;
+    return <p className="text-sm text-muted-foreground">Você não está na escala dos próximos dias. A administração monta a escala.</p>;
   }
   return (
     <ul className="divide-y rounded-lg border text-sm">
@@ -271,8 +271,8 @@ export default function Perfil() {
         )}
 
         {ehAdmin ? null : (
-          <Secao titulo="Meus próximos plantões" descricao="Nos dias de plantão você entra no sorteio de leads da sua área.">
-            <ProximosPlantoes eu={eu} />
+          <Secao titulo="Meus próximos dias na escala" descricao="Nos dias em que está na escala você entra no sorteio de leads da sua área.">
+            <ProximosDias eu={eu} />
           </Secao>
         )}
 

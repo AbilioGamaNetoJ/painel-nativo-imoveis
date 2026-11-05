@@ -48,20 +48,20 @@ export function areaDoLead(intencao: Intencao, motivo: MotivoEncaminhamento): Ar
   return porIntencao[intencao] ?? "recepcao";
 }
 
-/** Áreas que precisam de plantão em cada dia: fim de semana só vendas (regra da prévia) */
+/** Áreas que precisam de corretor escalado em cada dia: fim de semana só vendas (regra da prévia) */
 export function areasObrigatorias(dia: string): Area[] {
   const d = diaDaSemana(dia);
   return d === 0 || d === 6 ? ["vendas"] : ["vendas", "locacao", "captacao"];
 }
 
-export interface DiaSemPlantao {
+export interface DiaSemEscala {
   dia: string;
   areas: Area[];
 }
 
-export function diasSemPlantao(escala: ItemEscala[], colaboradores: Colaborador[], de: string, quantos: number): DiaSemPlantao[] {
+export function diasSemEscala(escala: ItemEscala[], colaboradores: Colaborador[], de: string, quantos: number): DiaSemEscala[] {
   const ativos = new Set(colaboradores.filter((c) => c.ativo).map((c) => c.id));
-  const saida: DiaSemPlantao[] = [];
+  const saida: DiaSemEscala[] = [];
   for (let i = 0; i < quantos; i++) {
     const dia = somarDias(de, i);
     const faltam = areasObrigatorias(dia).filter(
@@ -95,8 +95,8 @@ const SETE_DIAS_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
  * 1. mesmo contato nos últimos 7 dias → mesmo corretor, se ainda ativo
- * 2. senão, entre os plantonistas de hoje na área, os que receberam menos
- * 3. sem plantão → colaborador da recepção
+ * 2. senão, entre os corretores escalados hoje na área, os que receberam menos
+ * 3. ninguém escalado → colaborador da recepção
  */
 export function sortearCorretor(e: EntradaSorteio): ResultadoSorteio {
   const ativos = new Map(e.colaboradores.filter((c) => c.ativo).map((c) => [c.id, c]));
@@ -118,7 +118,7 @@ export function sortearCorretor(e: EntradaSorteio): ResultadoSorteio {
     const menor = Math.min(...candidatos.map((c) => c.recebidos));
     const empatados = candidatos.filter((c) => c.recebidos === menor);
     const escolhido = empatados[Math.floor(e.aleatorio() * empatados.length)];
-    return { colaboradorId: escolhido.colaboradorId, criterio: "plantao", itemEscalaId: escolhido.id, atualizacao: false };
+    return { colaboradorId: escolhido.colaboradorId, criterio: "escala", itemEscalaId: escolhido.id, atualizacao: false };
   }
 
   const recepcao = [...ativos.values()].find((c) => c.area === "recepcao");

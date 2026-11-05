@@ -13,7 +13,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDados } from "@/lib/dados";
 import { dataDoDia, diaISO, diaLongo, diaSemanaCurto, hojeISO, somarDias } from "@/lib/datas";
-import { areasObrigatorias, diasSemPlantao } from "@/lib/regras";
+import { areasObrigatorias, diasSemEscala } from "@/lib/regras";
 import { primeiroNome } from "@/lib/telefone";
 import { AREAS, ROTULO_AREA, type Area } from "@/lib/tipos";
 import { useVisao } from "@/lib/visao";
@@ -38,7 +38,7 @@ function Bloco({ titulo, descricao, children }: { titulo: string; descricao?: st
 
 export default function Escala() {
   const { ehAdmin, estado, porId } = useVisao();
-  const { alternarPlantao, copiarPlantao } = useDados();
+  const { alternarEscala, copiarEscala } = useDados();
   const hoje = hojeISO();
   const [dias, setDias] = useState<string[]>([hoje]);
   const [copiarDe, setCopiarDe] = useState("");
@@ -47,7 +47,7 @@ export default function Escala() {
   const ativos = estado.colaboradores.filter((c) => c.ativo);
   const recepcao = ativos.find((c) => c.area === "recepcao");
 
-  const lacunas = useMemo(() => diasSemPlantao(estado.escala, estado.colaboradores, hoje, 14), [estado.escala, estado.colaboradores, hoje]);
+  const lacunas = useMemo(() => diasSemEscala(estado.escala, estado.colaboradores, hoje, 14), [estado.escala, estado.colaboradores, hoje]);
   const diasComLacuna = useMemo(() => lacunas.map((l) => dataDoDia(l.dia)), [lacunas]);
   const diasComEscala = useMemo(() => [...new Set(estado.escala.map((i) => i.data))].sort(), [estado.escala]);
 
@@ -65,7 +65,7 @@ export default function Escala() {
   const origensCopia = diasComEscala.filter((d) => !dias.includes(d) || dias.length > 1);
 
   return (
-    <Pagina titulo="Escala de plantão" descricao="Quem recebe os leads do bot em cada dia, por área">
+    <Pagina titulo="Escala de atendimento" descricao="Quem recebe os leads do bot em cada dia, por área">
       <div className="mx-auto grid max-w-7xl gap-4 lg:grid-cols-[auto_1fr]">
         <div className="flex flex-col gap-4">
           <section className="rounded-xl border bg-card p-2">
@@ -74,9 +74,9 @@ export default function Escala() {
               locale={ptBR}
               selected={selecionadas}
               onSelect={(d) => escolher((d ?? []).map(diaISO))}
-              modifiers={{ semPlantao: diasComLacuna }}
+              modifiers={{ semEscala: diasComLacuna }}
               modifiersClassNames={{
-                semPlantao:
+                semEscala:
                   "relative after:absolute after:bottom-0.5 after:left-1/2 after:size-1 after:-translate-x-1/2 after:rounded-full after:bg-red-500",
               }}
               className="mx-auto"
@@ -93,7 +93,7 @@ export default function Escala() {
               </Button>
             </div>
             <p className="flex items-center gap-1.5 px-2 pb-2 text-[11px] text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-red-500" /> dia com área sem plantão
+              <span className="size-1.5 rounded-full bg-red-500" /> dia com área sem corretor escalado
             </p>
           </section>
 
@@ -101,7 +101,7 @@ export default function Escala() {
             <section className="rounded-xl border border-amber-200 dark:border-amber-500/30 bg-amber-50 dark:bg-amber-500/10 p-3 text-amber-950 dark:text-amber-200">
               <p className="flex items-center gap-2 text-sm font-semibold">
                 <AlertTriangle className="size-4" />
-                Próximos dias sem plantão
+                Próximos dias sem corretor escalado
               </p>
               <p className="mt-0.5 text-xs">Os leads dessas áreas vão para a recepção{recepcao ? ` (${recepcao.nome})` : ""}.</p>
               <ul className="mt-2 space-y-1">
@@ -125,7 +125,7 @@ export default function Escala() {
         </div>
 
         <div className="flex min-w-0 flex-col gap-4">
-          <Bloco titulo={rotuloDias} descricao="Marque quem fica de plantão. A alteração vale para todos os dias selecionados.">
+          <Bloco titulo={rotuloDias} descricao="Marque quem atende os leads. A alteração vale para todos os dias selecionados.">
             {dias.length > 1 ? (
               <p className="mb-3 flex flex-wrap gap-1.5">
                 {dias.slice(0, 10).map((d) => (
@@ -140,7 +140,7 @@ export default function Escala() {
             <div className="grid gap-4 md:grid-cols-2">
               {AREAS.map((area) => {
                 const doTime = ativos.filter((c) => c.area === area && c.papel === "corretor");
-                // só conta o dia em que a área exige plantão (fim de semana é só vendas)
+                // só conta o dia em que a área exige corretor escalado (fim de semana é só vendas)
                 const faltando = dias.some(
                   (d) => areasObrigatorias(d).includes(area) && !estado.escala.some((i) => i.data === d && i.area === area && porId.get(i.colaboradorId)?.ativo),
                 );
@@ -150,7 +150,7 @@ export default function Escala() {
                       <EtiquetaArea area={area} />
                       {faltando ? (
                         <span className="flex items-center gap-1 text-[11px] font-medium text-amber-700 dark:text-amber-300">
-                          <AlertTriangle className="size-3" /> sem plantão
+                          <AlertTriangle className="size-3" /> sem escala
                         </span>
                       ) : null}
                     </div>
@@ -165,7 +165,7 @@ export default function Escala() {
                               <Checkbox
                                 checked={estadoMarca.checked}
                                 indeterminate={estadoMarca.indeterminate}
-                                onCheckedChange={() => alternarPlantao(dias, c.id, area, !estadoMarca.checked)}
+                                onCheckedChange={() => alternarEscala(dias, c.id, area, !estadoMarca.checked)}
                                 className="data-[indeterminate]:border-primary data-[indeterminate]:bg-primary/60 data-[indeterminate]:text-primary-foreground"
                               />
                               <AvatarPessoa nome={c.nome} tamanho="sm" />
@@ -187,7 +187,7 @@ export default function Escala() {
 
             <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-4">
               <Copy className="size-4 text-muted-foreground" />
-              <span className="text-sm">Copiar o plantão de</span>
+              <span className="text-sm">Copiar a escala de</span>
               <Selecao
                 valor={copiarDe || "nenhum"}
                 aoMudar={(v) => setCopiarDe(v === "nenhum" ? "" : v)}
@@ -205,8 +205,8 @@ export default function Escala() {
                 disabled={!copiarDe || dias.filter((d) => d !== copiarDe).length === 0}
                 onClick={() => {
                   const alvo = dias.filter((d) => d !== copiarDe);
-                  copiarPlantao(copiarDe, alvo);
-                  toast.success("Plantão copiado", { description: `${curto(copiarDe)} → ${alvo.length} dia${alvo.length > 1 ? "s" : ""}.` });
+                  copiarEscala(copiarDe, alvo);
+                  toast.success("Escala copiada", { description: `${curto(copiarDe)} → ${alvo.length} dia${alvo.length > 1 ? "s" : ""}.` });
                 }}
               >
                 <CalendarPlus />
@@ -246,7 +246,7 @@ export default function Escala() {
                               {nomes.length ? (
                                 nomes.join(", ")
                               ) : falta.includes(area) && area !== "recepcao" ? (
-                                <span className="rounded-md bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-200">Sem plantão</span>
+                                <span className="rounded-md bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 text-xs font-medium text-amber-800 dark:text-amber-200">Sem escala</span>
                               ) : (
                                 <span className="text-muted-foreground">—</span>
                               )}
@@ -261,7 +261,7 @@ export default function Escala() {
             </div>
             <p className="mt-3 flex items-start gap-1.5 text-xs text-muted-foreground">
               <Info className="mt-0.5 size-3.5 shrink-0" />
-              Fim de semana só exige plantão de vendas. Quem já falou com o contato nos últimos 7 dias continua recebendo o lead, mesmo fora do plantão.
+              Fim de semana só exige corretor escalado em vendas. Quem já falou com o contato nos últimos 7 dias continua recebendo o lead, mesmo fora da escala.
             </p>
           </Bloco>
         </div>

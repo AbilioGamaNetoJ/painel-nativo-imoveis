@@ -160,3 +160,75 @@ html.dark {
     @apply font-sans;
   }
 }
+
+/* ---------- agentes: cartão e animações do mascote ---------- */
+
+/* cartão translúcido, sem desfoque: gradiente suave, borda fina e um brilho na borda de cima */
+.cartao-agente {
+  background: linear-gradient(145deg, oklch(1 0 0), oklch(0.975 0.014 150));
+  border: 1px solid oklch(0.91 0.015 150);
+  box-shadow:
+    0 8px 28px oklch(0.35 0.06 150 / 9%),
+    inset 0 1px 0 oklch(1 0 0 / 95%);
+}
+.dark .cartao-agente {
+  background: linear-gradient(145deg, oklch(1 0 0 / 8%), oklch(1 0 0 / 3%));
+  border-color: oklch(1 0 0 / 13%);
+  box-shadow:
+    0 8px 28px oklch(0 0 0 / 35%),
+    inset 0 1px 0 oklch(1 0 0 / 12%);
+}
+
+@keyframes mascote-flutuar {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7%); }
+}
+@keyframes mascote-respirar {
+  0%, 100% { transform: scale(1, 1); }
+  50% { transform: scale(1.02, 0.97); }
+}
+@keyframes mascote-piscar {
+  0%, 90%, 100% { transform: scaleY(1); }
+  94% { transform: scaleY(0.08); }
+}
+@keyframes mascote-antena {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@keyframes mascote-acordar {
+  0% { transform: translateY(0) scale(1, 1); }
+  30% { transform: translateY(-24%) scale(0.94, 1.08); }
+  58% { transform: translateY(0) scale(1.1, 0.9); }
+  80% { transform: translateY(-4%) scale(0.98, 1.03); }
+  100% { transform: translateY(0) scale(1, 1); }
+}
+@keyframes mascote-zzz {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.7); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translate(10px, -22px) scale(1.15); }
+}
+@keyframes mascote-brilho {
+  0%, 100% { opacity: 0.15; transform: rotate(45deg) scale(0.5); }
+  50% { opacity: 1; transform: rotate(45deg) scale(1); }
+}
+
+.mascote-acordar { animation: mascote-acordar 0.7s ease-out 1; }
+.mascote-flutuar { animation: mascote-flutuar 2.4s ease-in-out infinite; }
+.mascote-dormir { animation: mascote-respirar 3.6s ease-in-out infinite; transform-origin: 50% 100%; }
+.mascote-olhos { animation: mascote-piscar 4.5s infinite; transform-box: fill-box; transform-origin: center; }
+.mascote-antena { animation: mascote-antena 1.6s ease-in-out infinite; }
+.mascote-zzz { animation: mascote-zzz 3s ease-out infinite; }
+.mascote-brilho { animation: mascote-brilho 2.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mascote-acordar,
+  .mascote-flutuar,
+  .mascote-dormir,
+  .mascote-olhos,
+  .mascote-antena,
+  .mascote-zzz,
+  .mascote-brilho {
+    animation: none;
+  }
+  .mascote-zzz { opacity: 1; }
+}

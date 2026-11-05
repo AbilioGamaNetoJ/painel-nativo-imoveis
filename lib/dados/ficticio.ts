@@ -2,6 +2,7 @@ import { diaDaSemana, diaISO, somarDias } from "../datas";
 import { areaDoLead, classificarNivel, sortearCorretor } from "../regras";
 import { chaveTelefone } from "../telefone";
 import type {
+  Agente,
   Area,
   Colaborador,
   Conversa,
@@ -14,6 +15,7 @@ import type {
   OrigemLead,
 } from "../tipos";
 import {
+  NOME_BOT,
   camposDoFluxo,
   dialogoSemLead,
   montarDialogo,
@@ -293,6 +295,34 @@ function agendar(falas: Fala[], fim: Date, r: Aleatorio): { fala: Fala; quando: 
   });
 }
 
+// ---------------------------------------------------------------- agentes
+
+/** O SDR é o único liberado; os outros aparecem bloqueados. Depois do contrato cada agente aponta para um fluxo do n8n. */
+function criarAgentes(): Agente[] {
+  return [
+    {
+      id: "agente-sdr",
+      tipo: "sdr",
+      nome: NOME_BOT,
+      descricao: "Atende quem chega pelo WhatsApp, entende o que a pessoa procura e passa a ficha para o corretor escalado.",
+      ativo: true,
+      bloqueado: false,
+      alteradoEm: null,
+      alteradoPorId: null,
+    },
+    {
+      id: "agente-recuperacao",
+      tipo: "recuperacao",
+      nome: "Recuperação de Leads",
+      descricao: "Retoma o contato com leads que pararam de responder.",
+      ativo: false,
+      bloqueado: true,
+      alteradoEm: null,
+      alteradoPorId: null,
+    },
+  ];
+}
+
 export function gerarDemonstracao(agora: Date = new Date()): Estado {
   const r = criarAleatorio(20261104);
   const hoje = diaISO(agora);
@@ -375,7 +405,7 @@ export function gerarDemonstracao(agora: Date = new Date()): Estado {
     };
   });
 
-  // fim de semana só tem plantão de vendas: os outros leads vão para a sexta anterior
+  // fim de semana só tem escala de vendas: os outros leads vão para a sexta anterior
   for (const b of bases) {
     if (b.kit.intencao === "comprar" || b.kit.intencao === "permuta") continue;
     const dow = b.quando.getDay();
@@ -438,7 +468,7 @@ export function gerarDemonstracao(agora: Date = new Date()): Estado {
       colaboradorId: "",
       encaminhadoEm: quando.toISOString(),
       atualizacao: false,
-      criterio: "plantao",
+      criterio: "escala",
       conversaBotId,
       ...sobrescreve,
     };
@@ -726,5 +756,5 @@ export function gerarDemonstracao(agora: Date = new Date()): Estado {
   mensagens.sort((a, b) => a.enviadaEm.localeCompare(b.enviadaEm));
   leads.sort((a, b) => a.encaminhadoEm.localeCompare(b.encaminhadoEm));
 
-  return { semente: hoje, colaboradores, escala, conversas, mensagens, leads };
+  return { semente: hoje, colaboradores, escala, conversas, mensagens, leads, agentes: criarAgentes() };
 }

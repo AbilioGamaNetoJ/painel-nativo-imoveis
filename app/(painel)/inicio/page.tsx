@@ -9,7 +9,7 @@ import { AvatarPessoa } from "@/components/pessoa";
 import { Button } from "@/components/ui/button";
 import { useAgora } from "@/lib/agora";
 import { diaLongo, haQuanto, hojeISO } from "@/lib/datas";
-import { diasSemPlantao } from "@/lib/regras";
+import { diasSemEscala } from "@/lib/regras";
 import { primeiroNome } from "@/lib/telefone";
 import { AREAS, ROTULO_AREA, ROTULO_INTENCAO } from "@/lib/tipos";
 import { useVisao } from "@/lib/visao";
@@ -48,14 +48,14 @@ export default function Inicio() {
   const ativas = conversas.filter((c) => agora - new Date(c.ultimaMensagemEm).getTime() < 86400000).length;
   const pausadas = conversas.filter((c) => c.canal === "bot" && c.botPausadoAte && new Date(c.botPausadoAte).getTime() > agora).length;
 
-  const plantaoHoje = estado.escala.filter((i) => i.data === hoje && porId.get(i.colaboradorId)?.ativo);
-  const semPlantao = ehAdmin ? diasSemPlantao(estado.escala, estado.colaboradores, hoje, 14) : [];
+  const escaladosHoje = estado.escala.filter((i) => i.data === hoje && porId.get(i.colaboradorId)?.ativo);
+  const semEscala = ehAdmin ? diasSemEscala(estado.escala, estado.colaboradores, hoje, 14) : [];
   const desconectados = ehAdmin
     ? estado.colaboradores.filter((c) => c.ativo && c.papel === "corretor" && c.statusWhatsApp !== "conectado" && c.sessaoCaiuEm)
     : [];
   const recentes = [...leads].sort((a, b) => b.encaminhadoEm.localeCompare(a.encaminhadoEm)).slice(0, 6);
 
-  const meuPlantao = estado.escala.filter((i) => i.data === hoje && i.colaboradorId === eu?.id);
+  const minhaEscala = estado.escala.filter((i) => i.data === hoje && i.colaboradorId === eu?.id);
   const equipeAtendendo = estado.colaboradores.filter((c) => c.ativo && c.papel === "corretor");
 
   return (
@@ -76,9 +76,9 @@ export default function Inicio() {
         {!ehAdmin ? (
           <div className="flex items-center gap-3 rounded-xl border bg-accent/50 px-4 py-3 text-sm">
             <CalendarCheck className="size-4 shrink-0 text-primary" />
-            {meuPlantao.length ? (
+            {minhaEscala.length ? (
               <p>
-                Você está de <strong>plantão hoje</strong> em {meuPlantao.map((i) => ROTULO_AREA[i.area]).join(" e ")}. Os leads sorteados chegam no seu WhatsApp e aparecem aqui.
+                Você está <strong>escalado hoje</strong> em {minhaEscala.map((i) => ROTULO_AREA[i.area]).join(" e ")}. Os leads sorteados chegam no seu WhatsApp e aparecem aqui.
               </p>
             ) : (
               <p>Você não está na escala de hoje. Leads de contatos que você já atendeu nos últimos 7 dias continuam indo para você.</p>
@@ -96,7 +96,7 @@ export default function Inicio() {
         <div className="grid gap-4 lg:grid-cols-2">
           {ehAdmin ? (
             <Bloco
-              titulo="Plantão de hoje"
+              titulo="Escala de hoje"
               acao={
                 <Button variant="ghost" size="xs" render={<Link href="/escala" />} nativeButton={false}>
                   Abrir escala <ArrowRight />
@@ -105,7 +105,7 @@ export default function Inicio() {
             >
               <ul className="space-y-3">
                 {AREAS.map((area) => {
-                  const nomes = plantaoHoje.filter((i) => i.area === area);
+                  const nomes = escaladosHoje.filter((i) => i.area === area);
                   return (
                     <li key={area} className="flex items-start gap-3">
                       <span className="w-20 shrink-0 pt-0.5">
@@ -122,17 +122,17 @@ export default function Inicio() {
                           ))}
                         </div>
                       ) : (
-                        <span className="text-sm text-muted-foreground">Sem plantão: os leads vão para a recepção.</span>
+                        <span className="text-sm text-muted-foreground">Ninguém escalado: os leads vão para a recepção.</span>
                       )}
                     </li>
                   );
                 })}
               </ul>
-              {semPlantao.length ? (
+              {semEscala.length ? (
                 <Link href="/escala" className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 dark:bg-amber-500/10 px-3 py-2 text-xs text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-500/20">
                   <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
                   <span>
-                    <strong>{semPlantao.length} dias</strong> dos próximos 14 têm área sem plantão. Os leads dessas áreas vão para a recepção.
+                    <strong>{semEscala.length} dias</strong> dos próximos 14 têm área sem corretor escalado. Os leads dessas áreas vão para a recepção.
                   </span>
                 </Link>
               ) : null}

@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
-import { BotaoMenuMobile } from "@/components/botao-menu-mobile";
 import { cn } from "@/lib/utils";
 
-/** Cabeçalho + área rolável. No celular o avatar abre o menu do usuário; a navegação fica na barra inferior. */
+/** Cabeçalho + área rolável. No celular a navegação fica na barra inferior (NavegacaoInferior). */
 export function Pagina({
   titulo,
   descricao,
@@ -19,7 +18,6 @@ export function Pagina({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <header className="flex min-h-14 shrink-0 items-center gap-3 border-b px-4 py-2 md:px-6">
-        <BotaoMenuMobile />
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-base font-semibold">{titulo}</h1>
           {descricao ? <p className="truncate text-xs text-muted-foreground">{descricao}</p> : null}

@@ -72,7 +72,7 @@ const CENARIOS: Record<string, Cenario> = {
   },
   anunciar: {
     titulo: "Proprietário quer anunciar (captação)",
-    descricao: "Terreno em Ponta das Canas: o lead vai para o plantão de captação.",
+    descricao: "Terreno em Ponta das Canas: o lead vai para a escala de captação.",
     nomeWhatsApp: "Marta Q.",
     observacoes: "",
     perfil: {
@@ -258,7 +258,7 @@ export function SimularLead({ compacto = false }: { compacto?: boolean }) {
     });
     setNivel(nivelLead);
 
-    // sortear entre os plantonistas de hoje
+    // sortear entre os corretores escalados hoje
     setPasso(4);
     await esperar(900);
     if (!vivo()) return;
@@ -360,7 +360,7 @@ export function SimularLead({ compacto = false }: { compacto?: boolean }) {
         estado: est(3),
       },
       {
-        rotulo: "Sorteia o corretor do plantão de hoje",
+        rotulo: "Sorteia o corretor escalado hoje",
         detalhe: r ? (
           <div className="mt-1 space-y-1">
             {r.candidatos.length ? (
@@ -378,11 +378,11 @@ export function SimularLead({ compacto = false }: { compacto?: boolean }) {
               </ul>
             ) : null}
             <p className="text-muted-foreground">
-              {r.lead.criterio === "plantao"
-                ? `Quem recebeu menos entra no sorteio (plantão de ${ROTULO_AREA[r.area]}).`
+              {r.lead.criterio === "escala"
+                ? `Quem recebeu menos entra no sorteio (escala de ${ROTULO_AREA[r.area]}).`
                 : r.lead.criterio === "reuso_7_dias"
                   ? "Este contato já foi atendido nos últimos 7 dias: vai para o mesmo corretor."
-                  : `Sem plantão de ${ROTULO_AREA[r.area]} hoje: o lead vai para a recepção.`}
+                  : `Ninguém escalado em ${ROTULO_AREA[r.area]} hoje: o lead vai para a recepção.`}
             </p>
           </div>
         ) : undefined,
@@ -435,7 +435,7 @@ export function SimularLead({ compacto = false }: { compacto?: boolean }) {
             <Sparkles className="size-4 text-primary" />
             Simular um lead chegando
           </DialogTitle>
-          <DialogDescription>O cliente fala com o bot, o sistema classifica, sorteia o corretor do plantão de hoje e avisa no WhatsApp dele.</DialogDescription>
+          <DialogDescription>O cliente fala com o bot, o sistema classifica, sorteia o corretor escalado hoje e avisa no WhatsApp dele.</DialogDescription>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Selecao
               valor={cenarioId}

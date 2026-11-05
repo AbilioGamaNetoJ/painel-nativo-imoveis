@@ -118,9 +118,31 @@ export interface Lead {
   /** mesmo contato encaminhado de novo em até 7 dias */
   atualizacao: boolean;
   /** como o corretor foi escolhido */
-  criterio: "plantao" | "reuso_7_dias" | "recepcao";
+  criterio: "escala" | "reuso_7_dias" | "recepcao";
   conversaBotId: string;
 }
+
+export type TipoAgente = "sdr" | "recuperacao";
+
+/** Agente de IA que atende no WhatsApp. Cada um corresponde a um fluxo no n8n. */
+export interface Agente {
+  id: string;
+  tipo: TipoAgente;
+  nome: string;
+  descricao: string;
+  /** ligado: o fluxo do n8n responde os contatos novos; desligado: o fluxo fica parado */
+  ativo: boolean;
+  /** ainda não liberado para a Nativo: aparece no painel, mas não pode ser ligado */
+  bloqueado: boolean;
+  /** quando o agente foi ligado ou desligado pela última vez; nulo se nunca foi mexido */
+  alteradoEm: string | null;
+  alteradoPorId: string | null;
+}
+
+export const ROTULO_TIPO_AGENTE: Record<TipoAgente, string> = {
+  sdr: "SDR · pré-qualificação",
+  recuperacao: "Reengajamento",
+};
 
 export interface Estado {
   /** AAAA-MM-DD em que os dados foram gerados; muda o dia, a prévia gera de novo */
@@ -130,6 +152,7 @@ export interface Estado {
   conversas: Conversa[];
   mensagens: Mensagem[];
   leads: Lead[];
+  agentes: Agente[];
 }
 
 export const AREAS: Area[] = ["vendas", "locacao", "captacao", "recepcao"];
@@ -157,7 +180,7 @@ export const ROTULO_INTENCAO: Record<Intencao, string> = {
 };
 
 export const ROTULO_CRITERIO: Record<Lead["criterio"], string> = {
-  plantao: "Sorteado entre os plantonistas do dia",
+  escala: "Sorteado entre os corretores escalados do dia",
   reuso_7_dias: "Mesmo corretor de um contato dos últimos 7 dias",
-  recepcao: "Sem plantão na área: foi para a recepção",
+  recepcao: "Ninguém escalado na área: foi para a recepção",
 };

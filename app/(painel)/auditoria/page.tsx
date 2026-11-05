@@ -163,10 +163,10 @@ function Conteudo() {
           ) : null}
         </p>
 
-        <ul className="divide-y rounded-xl border bg-card md:hidden">
+        <ul className="flex flex-col gap-3 md:hidden">
           {filtrados.map((l) => (
-            <li key={l.id}>
-              <button type="button" onClick={() => abrir(l.id)} className="flex w-full flex-col gap-2.5 p-4 text-left outline-none active:bg-muted/60 focus-visible:bg-muted/60">
+            <li key={l.id} className="rounded-xl border bg-card">
+              <button type="button" onClick={() => abrir(l.id)} className="flex w-full flex-col gap-2.5 rounded-xl p-4 text-left outline-none active:bg-muted/60 focus-visible:bg-muted/60">
                 <div className="flex items-center gap-3">
                   <AvatarPessoa nome={l.nome || l.nomeWhatsApp} tamanho="lg" />
                   <div className="min-w-0 flex-1">
@@ -203,7 +203,7 @@ function Conteudo() {
               </button>
             </li>
           ))}
-          {filtrados.length === 0 ? <li className="py-12 text-center text-sm text-muted-foreground">Nenhum encaminhamento com esses filtros.</li> : null}
+          {filtrados.length === 0 ? <li className="rounded-xl border bg-card py-12 text-center text-sm text-muted-foreground">Nenhum encaminhamento com esses filtros.</li> : null}
         </ul>
 
         <div className="hidden overflow-x-auto rounded-xl border bg-card md:block">

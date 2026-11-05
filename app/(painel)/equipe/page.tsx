@@ -246,7 +246,7 @@ function MenuColaborador({ c, aoVerConvite }: { c: Colaborador; aoVerConvite: (p
 
 function CartaoColaborador({ c, euId, aoVerConvite }: { c: Colaborador; euId?: string; aoVerConvite: (para: string, papel: Papel) => void }) {
   return (
-    <li className={cn("space-y-3 p-4", !c.ativo && "opacity-60")}>
+    <li className={cn("space-y-3 rounded-xl border bg-card p-4", !c.ativo && "opacity-60")}>
       <div className="flex items-start gap-3">
         <AvatarPessoa nome={c.nome} tamanho="lg" />
         <div className="min-w-0 flex-1">
@@ -316,7 +316,7 @@ export default function Equipe() {
           </div>
         ))}
 
-        <ul className="divide-y rounded-xl border bg-card md:hidden">
+        <ul className="flex flex-col gap-3 md:hidden">
           {colaboradores.map((c) => (
             <CartaoColaborador key={c.id} c={c} euId={eu?.id} aoVerConvite={(para, papel) => setEmail({ para, papel })} />
           ))}

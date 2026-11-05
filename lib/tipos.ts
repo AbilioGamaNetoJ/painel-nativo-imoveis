@@ -189,7 +189,7 @@ export const ROTULO_INTENCAO: Record<Intencao, string> = {
 };
 
 export const ROTULO_CRITERIO: Record<Lead["criterio"], string> = {
-  escala: "Sorteado entre os corretores escalados do dia",
+  escala: "Sorteado entre os corretores de plantão do dia",
   reuso_7_dias: "Mesmo corretor de um contato dos últimos 7 dias",
-  recepcao: "Ninguém escalado na área: foi para a recepção",
+  recepcao: "Ninguém de plantão na área: foi para a recepção",
 };

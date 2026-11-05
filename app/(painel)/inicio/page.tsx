@@ -108,11 +108,11 @@ export default function Inicio() {
             <p className="min-w-0 flex-1">
               {estouLigado ? (
                 <>
-                  Você está <strong>ligado na escala</strong> e recebendo novos leads.
+                  Você está <strong>de plantão</strong> e recebendo novos leads.
                 </>
               ) : (
                 <>
-                  Você está <strong>desligado na escala</strong> no momento.
+                  Você está <strong>fora do plantão</strong> no momento.
                 </>
               )}
             </p>
@@ -174,9 +174,9 @@ export default function Inicio() {
 
           {ehAdmin ? (
             <Bloco
-              titulo="Equipe na escala"
+              titulo="Equipe de plantão"
               acao={
-                <Button variant="ghost" size="xs" render={<Link href="/escala" />} nativeButton={false}>
+                <Button variant="ghost" size="xs" render={<Link href="/plantao" />} nativeButton={false}>
                   Gerenciar <ArrowRight />
                 </Button>
               }
@@ -209,7 +209,7 @@ export default function Inicio() {
 
               {areasSemCorretor.length ? (
                 <Link
-                  href="/escala"
+                  href="/plantao"
                   className="mt-3 flex min-w-0 items-center gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900 transition-colors hover:bg-amber-100 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-200 dark:hover:bg-amber-500/20"
                 >
                   <AlertTriangle className="size-3.5 shrink-0" />

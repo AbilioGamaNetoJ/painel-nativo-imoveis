@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, CalendarDays, ClipboardList, Home, MessageSquare, UserRound, Users, type LucideIcon } from "lucide-react";
+import { Bot, ClipboardList, Home, MessageSquare, UserRound, UserRoundCheck, Users, type LucideIcon } from "lucide-react";
 import { useAgora } from "@/lib/agora";
 import { useVisao } from "@/lib/visao";
 
@@ -28,7 +28,7 @@ export function useMenu() {
   const conversasItem: ItemMenu = { href: "/conversas", rotulo: "Conversas", icone: MessageSquare, badge: ativas24h };
   // o corretor não tem Gestão: a lista dos leads dele continua entre os itens de atendimento
   const leadsItem: ItemMenu = { href: "/auditoria", rotulo: ehAdmin ? "Auditoria" : "Meus leads", icone: ClipboardList, badge: leadsHoje };
-  const escala: ItemMenu = { href: "/escala", rotulo: "Escala", icone: CalendarDays, badge: 0 };
+  const plantao: ItemMenu = { href: "/plantao", rotulo: "Plantão", icone: UserRoundCheck, badge: 0 };
   const equipe: ItemMenu = { href: "/equipe", rotulo: "Equipe", icone: Users, badge: 0 };
   const perfil: ItemMenu = { href: "/perfil", rotulo: "Perfil", icone: UserRound, badge: 0 };
 
@@ -42,8 +42,8 @@ export function useMenu() {
   }
   return {
     atendimento: [inicio, agentes, conversasItem],
-    gestao: [escala, equipe, leadsItem],
-    barra: [inicio, agentes, conversasItem, escala],
+    gestao: [plantao, equipe, leadsItem],
+    barra: [inicio, agentes, conversasItem, plantao],
     configuracoes: [perfil, equipe, leadsItem],
   };
 }

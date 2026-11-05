@@ -88,7 +88,7 @@ function LinhaCorretor({ colaborador, area, ligado, recebidosHoje, aoAlternar }:
   );
 }
 
-export default function Escala() {
+export default function Plantao() {
   const { ehAdmin, estado } = useVisao();
   const { alternarEscala } = useDados();
   const hoje = hojeISO();
@@ -119,7 +119,7 @@ export default function Escala() {
   );
 
   return (
-    <Pagina titulo="Escala de atendimento" descricao="Ligue ou desligue quem recebe os leads do bot">
+    <Pagina titulo="Plantão de atendimento" descricao="Ligue ou desligue quem está de plantão e recebe os leads do bot">
       <div className="mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-3.5 sm:gap-4">
         {/* Resumo objetivo no topo */}
         <div className="flex flex-wrap items-center justify-between gap-2.5 rounded-2xl border bg-card px-3.5 py-3 shadow-2xs sm:px-4">
@@ -130,10 +130,10 @@ export default function Escala() {
             <div className="min-w-0">
               <p className="truncate font-medium">
                 <strong className="tabular-nums">{totalLigados}</strong> de{" "}
-                <span className="tabular-nums">{corretoresAtivos.length}</span> corretores ligados
+                <span className="tabular-nums">{corretoresAtivos.length}</span> corretores de plantão
               </p>
               <p className="truncate text-xs text-muted-foreground">
-                Leads divididos entre quem está ligado na área.
+                Leads divididos entre quem está de plantão na área.
               </p>
             </div>
           </div>

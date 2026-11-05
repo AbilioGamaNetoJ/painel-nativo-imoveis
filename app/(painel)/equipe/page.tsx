@@ -89,7 +89,7 @@ function Cadastrar({ aberto, aoFechar, aoConvidar }: { aberto: boolean; aoFechar
         <form onSubmit={enviar} className="flex h-full flex-col" noValidate>
           <SheetHeader>
             <SheetTitle>Cadastrar colaborador</SheetTitle>
-            <SheetDescription>O colaborador entra na escala e recebe leads, mesmo sem acesso ao painel.</SheetDescription>
+            <SheetDescription>O colaborador entra no plantão e recebe leads, mesmo sem acesso ao painel.</SheetDescription>
           </SheetHeader>
           <div className="flex-1 space-y-4 px-4 py-2">
             <Campo rotulo="Nome completo" erro={tentou ? erros.nome : ""}>
@@ -168,7 +168,7 @@ function Convidar({ aberto, aoFechar, aoEnviar }: { aberto: boolean; aoFechar: (
           <Campo rotulo="E-mail" erro={tentou ? erro : ""}>
             <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="nome@exemplo.com.br" autoFocus />
           </Campo>
-          <Campo rotulo="Papel" dica={papel === "admin" ? "Administradores veem tudo e gerenciam a equipe e a escala." : "Corretores veem só as próprias conversas e leads."}>
+          <Campo rotulo="Papel" dica={papel === "admin" ? "Administradores veem tudo e gerenciam a equipe e o plantão." : "Corretores veem só as próprias conversas e leads."}>
             <Selecao valor={papel} aoMudar={setPapel} opcoes={PAPEIS} className="w-full" />
           </Campo>
           <DialogFooter>
@@ -196,7 +196,7 @@ function InterruptorAtivo({ c, euId }: { c: Colaborador; euId?: string }) {
     onCheckedChange={(v) => {
       definirAtivo(c.id, v);
       toast(v ? `${c.nome} ativado` : `${c.nome} desativado`, {
-        description: v ? "Volta a entrar na escala e no sorteio." : "Sai do sorteio e perde o acesso. O histórico fica guardado.",
+        description: v ? "Volta a entrar no plantão e no sorteio." : "Sai do sorteio e perde o acesso. O histórico fica guardado.",
       });
     }}
   />

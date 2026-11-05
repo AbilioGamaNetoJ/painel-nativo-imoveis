@@ -264,7 +264,7 @@ function Conteudo() {
           {ehAdmin ? (
             <>
               {" "}
-              · <span className="tabular-nums">{naRecepcao}</span> foram para a recepção por falta de corretor escalado
+              · <span className="tabular-nums">{naRecepcao}</span> foram para a recepção por falta de corretor de plantão
             </>
           ) : null}
         </p>
@@ -298,7 +298,7 @@ function Conteudo() {
                     <span className="flex min-w-0 items-center gap-1.5">
                       <AvatarPessoa nome={nomeDoCorretor(l.colaboradorId)} tamanho="sm" />
                       <span className="truncate">{nomeDoCorretor(l.colaboradorId)}</span>
-                      {l.criterio === "recepcao" ? <span className="shrink-0 rounded-md bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-medium text-amber-800 dark:text-amber-200">Sem escala</span> : null}
+                      {l.criterio === "recepcao" ? <span className="shrink-0 rounded-md bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-medium text-amber-800 dark:text-amber-200">Sem plantão</span> : null}
                     </span>
                   ) : (
                     <span>Origem: {ROTULO_ORIGEM[l.origem]}</span>
@@ -358,7 +358,7 @@ function Conteudo() {
                       <div className="flex items-center gap-2">
                         <AvatarPessoa nome={nomeDoCorretor(l.colaboradorId)} tamanho="sm" />
                         <span>{nomeDoCorretor(l.colaboradorId)}</span>
-                        {l.criterio === "recepcao" ? <span className="rounded-md bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-medium text-amber-800 dark:text-amber-200">Sem escala</span> : null}
+                        {l.criterio === "recepcao" ? <span className="rounded-md bg-amber-50 dark:bg-amber-500/10 px-1.5 py-0.5 text-[11px] font-medium text-amber-800 dark:text-amber-200">Sem plantão</span> : null}
                       </div>
                     </TableCell>
                   ) : null}

@@ -304,7 +304,7 @@ function criarAgentes(): Agente[] {
       id: "agente-sdr",
       tipo: "sdr",
       nome: NOME_BOT,
-      descricao: "Atende quem chega pelo WhatsApp, entende o que a pessoa procura e passa a ficha para o corretor escalado.",
+      descricao: "Atende quem chega pelo WhatsApp, entende o que a pessoa procura e passa a ficha para o corretor de plantão.",
       ativo: true,
       bloqueado: false,
       alteradoEm: null,

@@ -14,7 +14,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Painel Nativo Imóveis · Demonstração",
   description:
-    "Prévia do painel da Nativo Imóveis com dados fictícios: conversas do bot e dos corretores, auditoria de leads e escala do dia.",
+    "Prévia do painel da Nativo Imóveis com dados fictícios: conversas do bot e dos corretores, auditoria de leads e plantão do dia.",
   robots: { index: false, follow: false },
 };
 

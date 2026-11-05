@@ -191,7 +191,7 @@ function StatusEscala({ eu }: { eu: Colaborador }) {
   if (!itens.length) {
     return (
       <p className="text-sm text-muted-foreground">
-        Você está <strong>desligado</strong> na escala no momento. A administração liga ou desliga quem recebe novos leads.
+        Você está <strong>fora do plantão</strong> no momento. A administração liga ou desliga quem recebe novos leads.
       </p>
     );
   }
@@ -259,7 +259,7 @@ export default function Perfil() {
         )}
 
         {ehAdmin ? null : (
-          <Secao titulo="Status na escala" descricao="Quando você está ligado na escala, entra no sorteio de leads da sua área.">
+          <Secao titulo="Status no plantão" descricao="Quando você está de plantão, entra no sorteio de leads da sua área.">
             <StatusEscala eu={eu} />
           </Secao>
         )}

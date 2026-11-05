@@ -16,9 +16,9 @@ Entrada sem senha: na tela de login, "Entrar como Administrador" (Helena) ou "En
 
 1. Entrar como **Administrador**.
 2. **Conversas**: abrir um lead, com a ficha ao lado e o histórico; registrar a origem na ficha (quem preenche é o corretor).
-3. **Simular lead** (botão no menu): o cliente fala com o bot, o sistema classifica, sorteia o corretor da escala de hoje e o aviso chega no celular dele.
+3. **Simular lead** (botão no menu): o cliente fala com o bot, o sistema classifica, sorteia o corretor de plantão de hoje e o aviso chega no celular dele.
 4. **Auditoria**: o lead novo já está lá, com corretor, data e hora.
-5. **Escala**: resolver um dia sem corretor escalado, marcar vários dias de uma vez.
+5. **Plantão**: ligar e desligar quem recebe os leads de cada área.
 6. **Equipe**: cadastrar, convidar (mostra o e-mail), conectar o WhatsApp (QR Code).
 7. Trocar para **Corretor**: só as conversas e os leads dele.
 8. **Meu perfil** (menu do usuário): dados, tema claro/escuro e, no celular, a barra de navegação inferior.
@@ -42,7 +42,7 @@ Defina `PREVIA_SENHA` (ver `.env.example`) e o `proxy.ts` passa a pedir senha (B
 
 ## Como os dados funcionam
 
-- `lib/dados/ficticio.ts` gera equipe, escala (2 semanas antes e 2 depois), ~40 leads e as conversas, **sempre em relação a "agora"**: a prévia parece atual em qualquer dia. Os dados são determinísticos (mesma história a cada geração).
+- `lib/dados/ficticio.ts` gera equipe, plantão (2 semanas antes e 2 depois), ~40 leads e as conversas, **sempre em relação a "agora"**: a prévia parece atual em qualquer dia. Os dados são determinísticos (mesma história a cada geração).
 - As conversas do bot saem de `lib/dados/dialogo-bot.ts` (voz do prompt real) e as dos corretores de `dialogo-corretor.ts`. São escritas por regra a partir dos campos de cada lead, **não** geradas pelo modelo.
 - O estado fica no `localStorage` do navegador e é gerado de novo quando o dia muda.
 - `lib/regras.ts` tem a classificação do lead e o sorteio, no mesmo critério do n8n (`preparar-lead.js` e `docs/rodizio-vendedores.md`).
@@ -53,7 +53,7 @@ Defina `PREVIA_SENHA` (ver `.env.example`) e o `proxy.ts` passa a pedir senha (B
 | Recurso | Na prévia |
 |---|---|
 | Login | Escolha de perfil, sem senha |
-| Simular lead | Conversa gravada; o sorteio roda de verdade sobre a escala de hoje |
+| Simular lead | Conversa gravada; o sorteio roda de verdade sobre o plantão de hoje |
 | QR Code | Desenho ilustrativo; "conecta" sozinho em alguns segundos |
 | Áudios | Forma de onda e reprodução ilustrada, sem som |
 | Convite | Mostra o e-mail; nada é enviado |
@@ -63,7 +63,7 @@ Defina `PREVIA_SENHA` (ver `.env.example`) e o `proxy.ts` passa a pedir senha (B
 ## Estrutura
 
 ```
-app/(painel)/        inicio, conversas, auditoria, escala, equipe, equipe/[id] (WhatsApp)
+app/(painel)/        inicio, conversas, auditoria, plantao, equipe, equipe/[id] (WhatsApp)
 app/lead/[id]/       ficha do lead em largura de celular (link do aviso)
 app/login/
 components/          conversas/, simular-lead, ficha-lead, email-convite, ...

@@ -47,7 +47,7 @@ export default function Login() {
             <ShieldCheck className="size-4" />
             <span className="flex flex-col items-start leading-tight">
               <span>Entrar como Administrador</span>
-              <span className="text-[11px] font-normal opacity-80">Conversas, auditoria, escala e equipe</span>
+              <span className="text-[11px] font-normal opacity-80">Conversas, auditoria, plantão e equipe</span>
             </span>
           </Button>
           <Button size="lg" variant="outline" className="h-11 justify-start gap-3 px-4" onClick={() => entrarComo(CORRETOR)}>

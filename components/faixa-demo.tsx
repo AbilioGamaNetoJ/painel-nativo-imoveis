@@ -23,7 +23,7 @@ export function FaixaDemo() {
         className="h-6 shrink-0 text-amber-900 dark:text-amber-200 hover:bg-amber-100 dark:hover:bg-amber-500/20"
         onClick={() => {
           restaurar();
-          toast.success("Demonstração restaurada", { description: "Equipe, escala, leads e conversas voltaram ao início." });
+          toast.success("Demonstração restaurada", { description: "Equipe, plantão, leads e conversas voltaram ao início." });
         }}
       >
         <RotateCcw className="size-3" />

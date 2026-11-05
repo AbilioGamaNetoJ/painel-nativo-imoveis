@@ -21,7 +21,7 @@ export function fichaDoAgente(agente: Agente): FichaAgente | null {
         { titulo: "Recebe a mensagem", detalhe: "Chega no número do bot pela API oficial da Meta e entra no n8n." },
         { titulo: `${agente.nome} qualifica o contato`, detalhe: "Uma pergunta por vez: o que a pessoa procura, onde, faixa de valor e prazo." },
         { titulo: "Classifica o lead", detalhe: "Quente, morno ou frio, por regra e não pela IA." },
-        { titulo: "Sorteia o corretor escalado", detalhe: "Quem recebeu menos no dia entra no sorteio da área certa." },
+        { titulo: "Sorteia o corretor de plantão", detalhe: "Quem recebeu menos no dia entra no sorteio da área certa." },
         { titulo: "Grava na auditoria e nas conversas", detalhe: "Fica registrado para quem foi cada lead, com data e hora." },
         { titulo: "Avisa o corretor", detalhe: "Modelo oficial curto no WhatsApp; a ficha completa fica no painel." },
       ],

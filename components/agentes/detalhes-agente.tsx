@@ -63,7 +63,7 @@ export function DetalhesAgente({ agente, aberto, aoMudar }: { agente: Agente; ab
             </p>
           ) : agente.ativo ? null : (
             <p className="rounded-xl bg-muted px-3 py-2.5 text-sm text-muted-foreground">
-              Com {agente.nome} dormindo, os contatos novos não recebem resposta automática e nenhum lead é encaminhado para a escala.
+              Com {agente.nome} dormindo, os contatos novos não recebem resposta automática e nenhum lead é encaminhado para o plantão.
             </p>
           )}
 
